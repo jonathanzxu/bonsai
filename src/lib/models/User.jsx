@@ -4,13 +4,6 @@
 import mongoose from "mongoose"
 const userSchema = new mongoose.Schema(
     {
-        username : {
-            type: String,
-            required: true,
-            unique: true,
-            min: 6,
-            max: 20,
-        },
         email: {
             type: String,
             required: true,
@@ -22,6 +15,13 @@ const userSchema = new mongoose.Schema(
             },
             unique: true,
             max: 50,
+        },
+        username : {
+            type: String,
+            required: false,
+            unique: true,
+            min: 6,
+            max: 20,
         },
         password: {
             type: String,

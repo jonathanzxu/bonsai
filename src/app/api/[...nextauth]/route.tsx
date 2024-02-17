@@ -2,18 +2,19 @@
     This API is used for logging in with username/password and login providers
  */
 
-import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
 import User from "../../../lib/models/User";
 import connectDb from "../../../lib/database";
 import bcrypt from "bcrypt";
+import {NextResponse} from "next/server";
+import NextAuth, {Account, Profile, User as AuthUser} from "next-auth";
 
-export const authOptions = {
+export const authOptions: any = {
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET
+            clientId: process.env.GOOGLE_ID ?? "",
+            clientSecret: process.env.GOOGLE_SECRET ?? ""
         }),
         CredentialsProvider({
             id: "credentials",
@@ -24,7 +25,7 @@ export const authOptions = {
                 password: {label: "Password:", type: "password"},
                 picture: {label: "Picture:", type: "text"},
             },
-            async authorize(credentials) {
+            async authorize(credentials: any) {
                 try {
                     await connectDb();
                     const user = await User.findOne({email: credentials.email}) || await User.findOne({username: credentials.username});
@@ -32,23 +33,24 @@ export const authOptions = {
                         const isCorrectPass = await bcrypt.compare(credentials.password, user.password);
                         if (isCorrectPass) return user;
                     }
-                } catch (error) { throw new Error(error) }
+                } catch (error: any) {
+                    return new NextResponse(error, { status: 500 });
+                }
             },
         }),
     ],
     callbacks: {
-        async signIn(user, account, profile) {
+        async signIn({ user, account, profile }: { user: AuthUser; account: Account, profile: Profile }) {
             if (account?.provider === "credentials") { return true; }
             if (account?.provider === "google") {
                 try {
                     await connectDb();
-                    const foundUser = await User.findOne({email: profile.email}) || await User.findOne({username: profile.username});
+                    const foundUser = await User.findOne({email: profile.email});
                     if (!foundUser) {
                         const newUser = new User(
                             {
                                 email: profile.email,
-                                username: profile.username,
-                                picture: profile.picture
+                                picture: profile.image
                             }
                         );
                         newUser.save();
