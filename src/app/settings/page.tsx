@@ -73,6 +73,10 @@ const formSchemaPW = z
   }
 )
 
+const formSchemaAV = z.object({
+  image: z.string().url()
+})
+
 export default function ProfileForm() {
   // Username
    // 1. Define your form.
@@ -116,11 +120,50 @@ export default function ProfileForm() {
     console.log(values)
   }
 
+  //Avatar
+  const formAV = useForm<z.infer<typeof formSchemaAV>>({
+    resolver: zodResolver(formSchemaAV),
+    defaultValues:{
+      image: "",
+    }
+  })
+
+  function onSubmitAV(values: z.infer<typeof formSchemaAV>){
+    console.log(values)
+  }
+
 
   return (
     <>
     <div className = "flex p-12">
+    <div>
     <AvatarChange/>
+    <Form {...formAV}>
+      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-0 ">
+      <FormField
+          control={formAV.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Change Image</FormLabel>
+              <FormControl>
+                <Input 
+                placeholder="Image URL"
+                type = "url" 
+                {...field} />
+              </FormControl>
+              <FormDescription>
+                Input the url of your new image
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+    </div>
     <div className = "flex-1 p-10">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0 ">
@@ -180,7 +223,10 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>Current Password</FormLabel>
               <FormControl>
-                <Input placeholder="Current Password" {...field} />
+                <Input 
+                placeholder="Current Password" 
+                type = "password"
+                {...field} />
               </FormControl>
               <FormDescription>
                 Your current account password
@@ -215,7 +261,10 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>New Password Confirm</FormLabel>
               <FormControl>
-                <Input placeholder="Password Confirm" {...field} />
+                <Input 
+                placeholder="Password Confirm" 
+                type = "password"
+                {...field} />
               </FormControl>
               <FormDescription>
               </FormDescription>
