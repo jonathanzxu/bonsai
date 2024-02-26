@@ -16,22 +16,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from "@/components/ui/avatar"
-
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 
-function AvatarPart(){
-    return (
-        <Avatar>
-            <AvatarImage src = "http://tinyurl.com/yv8cestb" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-    )
-}
 
 function AvatarChange(){
   return (
