@@ -1,5 +1,7 @@
 import { Friends, columns } from "./columns"
 import { DataTable } from "./data-table"
+import {Input} from "@/components/ui/input"
+import {Button} from "@/components/ui/button"
 
 async function getData(): Promise<Friends[]> {
   // Fetch data from your API here.
@@ -25,6 +27,13 @@ export default async function DemoPage() {
     <>
     <div className="container mx-auto py-10">
       <DataTable columns={columns} data={data} />
+    </div>
+    <div className = "container flex-row w-full max-w-sm items-center space-x-2">
+    <h3>Add Friend</h3>
+    <div className="container flex w-full max-w-full items-center space-x-2">
+      <Input type="username" placeholder="Username" />
+      <Button type="submit">Submit</Button>
+    </div>
     </div>
     </>
   )
