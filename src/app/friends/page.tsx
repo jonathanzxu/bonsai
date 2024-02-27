@@ -30,8 +30,8 @@ export default async function DemoPage() {
     </div>
     <div className = "container flex-row w-full max-w-sm items-center space-x-2">
     <h3>Add Friend</h3>
-    <div className="container flex w-full max-w-full items-center space-x-2">
-      <Input type="username" placeholder="Username" />
+    <div className="container flex w-full max-w-full space-x-2">
+      <Input className = "flex-1" type="username" placeholder="Username" />
       <Button type="submit">Submit</Button>
     </div>
     </div>
