@@ -4,17 +4,20 @@
 
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
-import User from "../../../lib/models/User";
-import connectDb from "../../../lib/database";
+import User from "@/lib/models/User";
+import connectDb from "@/lib/database";
 import bcrypt from "bcrypt";
 import {NextResponse} from "next/server";
 import NextAuth, {Account, Profile, User as AuthUser} from "next-auth";
 
 export const authOptions: any = {
+    pages: {
+        signIn: "/login",
+    },
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID ?? "",
-            clientSecret: process.env.GOOGLE_SECRET ?? ""
+            clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
         }),
         CredentialsProvider({
             id: "credentials",
@@ -50,6 +53,7 @@ export const authOptions: any = {
                         const newUser = new User(
                             {
                                 email: profile.email,
+                                username: profile.name,
                                 picture: profile.image
                             }
                         );
@@ -58,6 +62,19 @@ export const authOptions: any = {
                     return true;
                 } catch (error) { return false; }
             }
+        },
+        async jwt({ token, user }: { token: any; user: any }) {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+                token.username = user.username;
+                token.picture = user.picture;
+            }
+            return token;
+        },
+        async session({ session, token }: { session: any; token: any }) {
+            session.user = token;
+            return session;
         }
     }
 }
