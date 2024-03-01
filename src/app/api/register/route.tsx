@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import {NextResponse} from "next/server";
 
 export const POST = async (request: any) => {
-    const {email, username, password, picture} = request.json();
+    const {email, username, password, picture} = await request.json();
     try {
         await connectDb();
         const user = await User.findOne({email: email}) || await User.findOne({username: username}); // Check if user already exists
