@@ -15,36 +15,35 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { getSession} from 'next-auth/react';
+import {getSession, signIn} from 'next-auth/react';
 
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
+import {toast} from "sonner";
 
 
 function AvatarChange(){
     const [user, setUser] = useState(undefined);
     useEffect(() => {
         getSession().then((user) => {
-            console.log("User: ", user)
             setUser((user as any).user);
         });
     }, []);
     const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
-    const imageSrc = user?.picture ?? defaultImage;
-    const altText = user?.username ?? "Default User";
+    const imageSrc = user?.picture || defaultImage;
+    const altText = user?.username || "Default User";
 
     return (
-        <AvatarPrimative.Root className="AvatarRoot h-1000 w-1000">
+        <AvatarPrimative.Root className="AvatarRoot h-500 w-500">
             <AvatarPrimative.Image
                 className="AvatarImage"
                 src={imageSrc}
                 alt={altText}
+                style={{maxHeight: '500px', maxWidth: '500px'}}
             />
-            <AvatarPrimative.Fallback className="AvatarFallback" delayMs={600}>
-                {altText.substring(0, 1).toUpperCase()}
-            </AvatarPrimative.Fallback>
         </AvatarPrimative.Root>
     )
+
 }
 
 const formSchema = z.object({
@@ -76,28 +75,40 @@ const formSchemaAV = z.object({
 })
 
 export default function ProfileForm() {
+    //username
    const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
     },
   })
- 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+      const response = await fetch('/api/change-username', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              newUsername: values.username,
+          }),
+      }).then((res) => {
+          if (res.ok) {
+              console.error('Changed username');
+          } else {
+              console.error('Could not change username');
+          }
+      });
   }
 
   //email
-  // 1. Define your form.
   const formEM = useForm<z.infer<typeof formSchemaEM>>({
     resolver: zodResolver(formSchemaEM),
     defaultValues: {
       email: "",
     },
   })
- 
-  // 2. Define a submit handler.
+
   function onSubmitEM(values: z.infer<typeof formSchemaEM>) {
     console.log(values)
   }
@@ -131,11 +142,11 @@ export default function ProfileForm() {
 
   return (
     <>
-    <div className = "flex p-12">
+    <div className = "flex p-12 ">
     <div>
     <AvatarChange/>
     <Form {...formAV}>
-      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-0 ">
+      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-0 mb-4">
       <FormField
           control={formAV.control}
           name="image"
@@ -143,9 +154,9 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>Change Image</FormLabel>
               <FormControl>
-                <Input 
+                <Input
                 placeholder="Image URL"
-                type = "url" 
+                type = "url"
                 {...field} />
               </FormControl>
               <FormDescription>
@@ -155,14 +166,14 @@ export default function ProfileForm() {
             </FormItem>
           )}
         />
-        
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>
     </div>
     <div className = "flex-1 p-10">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0 ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0 mb-4">
       <FormField
           control={form.control}
           name="username"
@@ -170,9 +181,9 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>Change Username</FormLabel>
               <FormControl>
-                <Input 
+                <Input
                 placeholder="Username"
-                type = "username" 
+                type = "username"
                 {...field} />
               </FormControl>
               <FormDescription>
@@ -182,12 +193,12 @@ export default function ProfileForm() {
             </FormItem>
           )}
         />
-        
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>
     <Form {...formEM}>
-      <form onSubmit={formEM.handleSubmit(onSubmitEM)} className="space-y-0">
+      <form onSubmit={formEM.handleSubmit(onSubmitEM)} className="space-y-0 mb-4">
       <FormField
           control={formEM.control}
           name="email"
@@ -195,7 +206,7 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>Change Email Address</FormLabel>
               <FormControl>
-                <Input 
+                <Input
                 placeholder="Email"
                 type = "email"
                 {...field} />
@@ -211,21 +222,21 @@ export default function ProfileForm() {
       </form>
     </Form>
     <Form {...formPW}>
-      <form onSubmit={formPW.handleSubmit(onSubmitPW)} className="space-y-0">
+      <form onSubmit={formPW.handleSubmit(onSubmitPW)}>
       <FormField
           control={formPW.control}
           name="passwordPrev"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Current Password</FormLabel>
+            <FormItem className="mb-2">
+              <FormLabel>Change Password</FormLabel>
               <FormControl>
-                <Input 
-                placeholder="Current Password" 
+                <Input
+                placeholder="Current Password"
                 type = "password"
                 {...field} />
               </FormControl>
               <FormDescription>
-                Your current account password
+                Your current password
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -235,16 +246,15 @@ export default function ProfileForm() {
           control={formPW.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>New Password</FormLabel>
+            <FormItem className="mb-2">
               <FormControl>
-                <Input 
-                placeholder="Password" 
+                <Input
+                placeholder="Password"
                 type = "password"
                 {...field} />
               </FormControl>
               <FormDescription>
-                Your account password
+                Your new password
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -254,21 +264,21 @@ export default function ProfileForm() {
           control={formPW.control}
           name="passwordConfirm"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>New Password Confirm</FormLabel>
+            <FormItem >
               <FormControl>
-                <Input 
-                placeholder="Password Confirm" 
+                <Input
+                placeholder="Password Confirm"
                 type = "password"
                 {...field} />
               </FormControl>
               <FormDescription>
+                  Your current password
               </FormDescription>
               <FormMessage />
             </FormItem>
         )}
       />
-      
+
       <Button type="submit">Submit</Button>
       </form>
     </Form>
