@@ -41,8 +41,27 @@ function Navbar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Avatar>
-                                    <AvatarImage src={(user as any).profile} alt={(user as any).username} />
-                                    <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                                    <AvatarImage
+                                        src={(user as any).picture}
+                                        alt={(user as any).username}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            objectPosition: 'center'
+                                        }}
+                                    />
+                                    <AvatarFallback
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        {(user as any).username.substring(0, 1).toUpperCase()}
+                                    </AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
