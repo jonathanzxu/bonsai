@@ -87,8 +87,8 @@ export default function Home() {
       <div className="flex w-full flex-col items-center justify-center max-w-xl">
         <Tabs defaultValue="login" className="flex flex-col w-full items-center justify-center">
           <TabsList className="w-full">
-            <TabsTrigger value="login" className="w-full">login</TabsTrigger>
-            <TabsTrigger value="register" className="w-full">register</TabsTrigger>
+            <TabsTrigger value="login" className="w-full">Login</TabsTrigger>
+            <TabsTrigger value="register" className="w-full">Register</TabsTrigger>
           </TabsList>
           <TabsContent value="login" className="w-full">
             <Form {...form}>
