@@ -1,5 +1,5 @@
 /*
-    This API is used for changing a user's username
+    This API is used for changing a user's email address
  */
 
 import connectDb from "../../../lib/database";
@@ -14,23 +14,21 @@ export const POST = async (request: any) => {
     if (!session) {
         return new NextResponse("Unauthorized", { status: 401 });
     }
-    const {newUsername} = await request.json();
+    const {newEmail} = await request.json();
     const email = session.user.email;
-    const username = session.user.username;
-
     try {
         await connectDb();
         const user = await User.findOne({email: email});
         if (!user) {
             return new NextResponse("Email not recognized", { status: 403 });
         }
-        else if (user.username === newUsername) {
-            return new NextResponse("Username cannot be the same", { status: 403 });
+        else if (email === newEmail) {
+            return new NextResponse("Email cannot be the same", { status: 403 });
         }
         else {
-            user.username = newUsername;
+            user.email = newEmail;
             await user.save();
-            return new NextResponse("Username changed", { status: 200 });
+            return new NextResponse("Email changed", { status: 200 });
         }
     } catch (error: any) {
         return new NextResponse(error, { status: 500 });

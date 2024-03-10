@@ -109,8 +109,22 @@ export default function ProfileForm() {
     },
   })
 
-  function onSubmitEM(values: z.infer<typeof formSchemaEM>) {
-    console.log(values)
+  async function onSubmitEM(values: z.infer<typeof formSchemaEM>) {
+      const response = await fetch('/api/change-email', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              newEmail: values.email,
+          }),
+      }).then((res) => {
+          if (res.ok) {
+              console.error('Changed email');
+          } else {
+              console.error('Could not change email');
+          }
+      });
   }
 
   //password
