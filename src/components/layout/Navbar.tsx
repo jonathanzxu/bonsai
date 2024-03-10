@@ -39,7 +39,7 @@ function Navbar() {
                 <>
                     <NavigationMenuItem>           
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
+                            <DropdownMenuTrigger style={{ outline: 'none' }}>
                                 <Avatar>
                                     <AvatarImage
                                         src={(user as any).picture}
@@ -66,10 +66,10 @@ function Navbar() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem onSelect={() => router.push('/settings')}>
-                                    manage profile
+                                    Settings
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onSelect={() => signOut({ callbackUrl: '/login' })}>
-                                    log out
+                                    Logout
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
