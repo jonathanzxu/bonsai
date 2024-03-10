@@ -15,24 +15,36 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { getSession} from 'next-auth/react';
 
 import * as AvatarPrimative from '@radix-ui/react-avatar';
+import {useEffect, useState} from "react";
 
 
 function AvatarChange(){
-  return (
-    <AvatarPrimative.Root className="AvatarRoot h-1000 w-1000">
-      <AvatarPrimative.Image
-        className="AvatarImage"
-        src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
-        alt="Colm Tuite"
-      />
-      <AvatarPrimative.Fallback className="AvatarFallback" delayMs={600}>
-        CT
-      </AvatarPrimative.Fallback>
-    </AvatarPrimative.Root>
-  )
-  
+    const [user, setUser] = useState(undefined);
+    useEffect(() => {
+        getSession().then((user) => {
+            console.log("User: ", user)
+            setUser((user as any).user);
+        });
+    }, []);
+    const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
+    const imageSrc = user?.picture ?? defaultImage;
+    const altText = user?.username ?? "Default User";
+
+    return (
+        <AvatarPrimative.Root className="AvatarRoot h-1000 w-1000">
+            <AvatarPrimative.Image
+                className="AvatarImage"
+                src={imageSrc}
+                alt={altText}
+            />
+            <AvatarPrimative.Fallback className="AvatarFallback" delayMs={600}>
+                {altText.substring(0, 1).toUpperCase()}
+            </AvatarPrimative.Fallback>
+        </AvatarPrimative.Root>
+    )
 }
 
 const formSchema = z.object({
@@ -64,8 +76,6 @@ const formSchemaAV = z.object({
 })
 
 export default function ProfileForm() {
-  // Username
-   // 1. Define your form.
    const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
