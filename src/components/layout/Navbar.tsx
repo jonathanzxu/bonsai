@@ -60,7 +60,7 @@ function Navbar() {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        {(user as any).username.substring(0, 1).toUpperCase()}
+                                        {(user && user.username) ? user.username.substring(0, 1).toUpperCase() : "G"}
                                     </AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>

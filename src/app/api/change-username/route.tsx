@@ -20,7 +20,12 @@ export const POST = async (request: any) => {
 
     try {
         await connectDb();
-        const user = await User.findOne({email: email});
+        const user = await User.findOne({
+            $or: [
+                { email: email },
+                { username: username }
+            ]
+        });
         if (!user) {
             return new NextResponse("Email not recognized", { status: 403 });
         }

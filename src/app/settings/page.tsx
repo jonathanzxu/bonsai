@@ -31,16 +31,17 @@ function AvatarChange(){
     }, []);
     const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
     const imageSrc = user?.picture || defaultImage;
-    const altText = user?.username || "Default User";
+    const altText = user?.username || "No username";
 
     return (
-        <AvatarPrimative.Root className="AvatarRoot h-500 w-500">
+        <AvatarPrimative.Root className="AvatarRoot h-500 w-500" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <AvatarPrimative.Image
                 className="AvatarImage"
                 src={imageSrc}
                 alt={altText}
                 style={{maxHeight: '500px', maxWidth: '500px'}}
             />
+            <div className="Username" style={{fontWeight: 'bold', marginTop: '10px'}}>{altText}</div>
         </AvatarPrimative.Root>
     )
 
@@ -90,7 +91,7 @@ export default function ProfileForm() {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              newUsername: values.username,
+              newUsername: values.username
           }),
       }).then((res) => {
           if (res.ok) {
@@ -116,7 +117,7 @@ export default function ProfileForm() {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              newEmail: values.email,
+              newEmail: values.email
           }),
       }).then((res) => {
           if (res.ok) {
@@ -137,8 +138,23 @@ export default function ProfileForm() {
     }
   })
 
-  function onSubmitPW(values: z.infer<typeof formSchemaPW>){
-    console.log(values)
+  async function onSubmitPW(values: z.infer<typeof formSchemaPW>){
+      const response = await fetch('/api/change-password', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              oldPassword: values.passwordPrev,
+              newPassword: values.password
+          }),
+      }).then((res) => {
+          if (res.ok) {
+              console.error('Changed password');
+          } else {
+              console.error('Could not change password');
+          }
+      });
   }
 
   //Avatar
@@ -149,8 +165,22 @@ export default function ProfileForm() {
     }
   })
 
-  function onSubmitAV(values: z.infer<typeof formSchemaAV>){
-    console.log(values)
+  async function onSubmitAV(values: z.infer<typeof formSchemaAV>){
+      const response = await fetch('/api/change-profile-picture', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              newPicture: values.image
+          }),
+      }).then((res) => {
+          if (res.ok) {
+              console.error('Changed picture');
+          } else {
+              console.error('Could not change picture');
+          }
+      });
   }
 
 
@@ -286,7 +316,7 @@ export default function ProfileForm() {
                 {...field} />
               </FormControl>
               <FormDescription>
-                  Your current password
+                  Confirm your new password
               </FormDescription>
               <FormMessage />
             </FormItem>
