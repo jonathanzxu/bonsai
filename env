@@ -1,3 +1,0 @@
-MONGO=mongodb+srv://anthonyla:9DAoGnvNumXy6JTw@taskmanager.wvsknzw.mongodb.net/taskmanager?retryWrites=true&w=majority
-AUTH_SECRET=test
-AUTH_URL=http://localhost:3000/api/auth
