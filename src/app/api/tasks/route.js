@@ -25,3 +25,4 @@ export async function DELETE(request) {
     await Task.findByIdAndDelete(id);
     return NextResponse.json({ message: "Task successfully deleted." }, { sttaus: 200});
 }
+
