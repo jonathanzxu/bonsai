@@ -1,3 +1,7 @@
+/*
+    This API is used for updating and getting tasks
+*/
+
 import connectDb from "../../../lib/database";
 import Task from "../../../lib/models/User";
 import {NextResponse} from "next/server";
