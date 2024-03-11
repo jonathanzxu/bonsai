@@ -1,5 +1,3 @@
-MONGODB_URI=mongodb+srv://andrewapexawu:Nluio28ToD2opSGw@cluster0.92z7r9a.mongodb.net/crud_db
-
 MONGO=mongodb+srv://anthonyla:9DAoGnvNumXy6JTw@taskmanager.wvsknzw.mongodb.net/taskmanager?retryWrites=true&w=majority
 AUTH_SECRET=test
 AUTH_URL=http://localhost:3000/api/auth
