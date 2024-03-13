@@ -74,3 +74,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.link-dark {
+  stroke: #000 !important;
+}
+
+.link-light {
+  stroke: #fff !important;
+}
