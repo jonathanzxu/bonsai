@@ -7,6 +7,11 @@
             name: {
                 type: String,
                 required: true,
+                unique: true
+            },
+            description: {
+                type: String,
+                required: false
             },
             members: {
                 type: [mongoose.Schema.Types.ObjectId],

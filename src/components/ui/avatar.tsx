@@ -7,16 +7,23 @@ import { cn } from "@/lib/utils"
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
-      className
-    )}
-    {...props}
-  />
+  React.ComponentPropsWithoutRef<any>
+>(({ className, tooltip, ...props }, ref) => (
+  <div className="relative flex flex-col group items-center">
+    <AvatarPrimitive.Root
+      ref={ref}
+      className={cn(
+        "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+        className
+      )}
+      {...props}
+    />
+    { tooltip &&
+    <span className="absolute -bottom-8 whitespace-nowrap scale-0 group-hover:scale-100 transition-all text-sm bg-black px-2 py-0.5 rounded-sm border-[1px] border-white text-white">
+        {tooltip}
+    </span>
+    }
+  </div>
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
 

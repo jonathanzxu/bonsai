@@ -1,32 +1,12 @@
-import { Friends, columns } from "./columns"
-import { DataTable } from "./data-table"
-import { FriendForm } from "./form";
+"use client";
+import { Friends, columns } from "./columns";
+import { DataTable } from "./data-table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { getFriends, addFriend } from "@/app/actions";
 
-
-
-import { getSession } from "next-auth/react";
-import {useEffect, useState} from "react";
-
-import connectDb from "../../lib/database";
-import User from "../../lib/models/User";
-import {NextResponse} from "next/server";
-import { getServerSession } from 'next-auth'
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { auth } from "@/lib/auth";
-
-
-
-async function myFunction(){
-  const session = await getServerSession(authOptions);
-    if (!session) {
-        return new NextResponse("Unauthorized", { status: 401 });
-    }
-    const username = "hello";
-    return username;
-}
-
-
-async function getData(): Promise<Friends[]> {
+function getData(): Friends[] {
 
   // Fetch data from your API here.
     
@@ -65,10 +45,10 @@ async function getData(): Promise<Friends[]> {
     }
 
 }
-
-
-export default async function DemoPage() {
-  const data = await getData()
+    
+export default function DemoPage() {
+  const data = getData();
+  const [friendUsername, setFriendUsername] = useState("");
 
   const trial = await myFunction();
   //const trial = 'something';
@@ -82,7 +62,8 @@ export default async function DemoPage() {
     <div className = "container flex-row w-full max-w-sm items-center space-x-2">
 
     <div className="container flex w-full max-w-full space-x-2">
-      <FriendForm/>
+      <Input className="flex-1" value={friendUsername} onChange={(e) => setFriendUsername(e.target.value)} placeholder="Username" />
+      <Button onClick={() => addFriend(friendUsername)}>Add</Button>
     </div>
     </div>
     </>
