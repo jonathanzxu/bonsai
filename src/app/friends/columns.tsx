@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Friends = {
-    avatarURL: string,
+    picture: string,
     username : string,
     id: string,
 }
@@ -37,10 +37,10 @@ export const columns: ColumnDef<Friends>[] = [
       enableHiding: false,
     },
     {
-        accessorKey: "avatarURL",
+        accessorKey: "picture",
         header: "",
         cell: ({row}) =>{
-            const imgURL:string = row.getValue("avatarURL")
+            const imgURL:string = row.getValue("picture")
             return (
                 <>
                 <Avatar>
