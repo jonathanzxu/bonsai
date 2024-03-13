@@ -1,0 +1,15 @@
+import mongoose, { Schema } from "mongoose";
+
+const taskAlternateSchema = new Schema (
+    {
+        name: String,
+        description: String,
+        priority: String,
+    }, {
+        timestamps: true,
+    }
+);
+
+const TaskAlternate = mongoose.models.TaskAlternate || mongoose.model("Task Alternate", taskAlternateSchema);
+
+export default TaskAlternate;

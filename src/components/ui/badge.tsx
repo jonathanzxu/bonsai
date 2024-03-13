@@ -27,9 +27,16 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
+function Badge({ className, variant, tooltip, ...props }: any) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className="relative flex flex-col items-center group">
+      <div className={cn(badgeVariants({ variant }), className)} {...props} />
+      { tooltip &&
+      <span className="absolute whitespace-nowrap -bottom-8 scale-0 group-hover:scale-100 transition-all text-sm bg-black px-2 py-0.5 rounded-sm border-[1px] border-white text-white">
+          {tooltip}
+      </span>
+      }
+    </div>
   )
 }
 
