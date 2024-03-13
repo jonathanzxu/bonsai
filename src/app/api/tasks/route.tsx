@@ -7,9 +7,9 @@ import Task from "../../../lib/models/Task";
 import { NextResponse } from "next/server";
 
 export async function POST(request: any) {
-    const { name, description, priority } = await request.json();
+    const { title, description, status, users, project, subtasks, parent, dueDate, priority } = await request.json();
     await connectDb();
-    await Task.create({name, description, priority});
+    await Task.create({title, description, status, users, project, subtasks, parent, dueDate, priority});
     return NextResponse.json({message: "Task successfuly created."}, {status: 201});
 }
 
