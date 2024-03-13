@@ -6,6 +6,18 @@ import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+import {
   Form,
   FormControl,
   FormDescription,
@@ -15,18 +27,18 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {getSession, signIn} from 'next-auth/react';
+import {getSession, signOut} from 'next-auth/react';
 
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
-import {toast} from "sonner";
-
 
 function AvatarChange(){
     const [user, setUser] = useState(undefined);
     useEffect(() => {
         getSession().then((user) => {
-            setUser((user as any).user);
+            if (user) {
+                setUser((user as any).user);
+            }
         });
     }, []);
     const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
@@ -46,6 +58,47 @@ function AvatarChange(){
     )
 
 }
+
+function DeleteAccountButton() {
+    const handleDeleteAccount = async () => {
+        const response = await fetch('/api/delete-account', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res.ok) {
+                console.error('Deleted user');
+                signOut({ callbackUrl: '/login' });
+            } else {
+                console.error('Could not delete user');
+            }
+        });
+    };
+
+
+    return (
+        <Button>
+            <AlertDialog>
+                <AlertDialogTrigger>Delete Account</AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteAccount}>Delete account</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </Button>
+    );
+}
+
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -322,9 +375,9 @@ export default function ProfileForm() {
             </FormItem>
         )}
       />
-
-      <Button type="submit">Submit</Button>
+          <Button type="submit" style={{ marginBottom: '25px' }}>Submit</Button>
       </form>
+        <DeleteAccountButton></DeleteAccountButton>
     </Form>
     </div>
     </div>

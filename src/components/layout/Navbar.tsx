@@ -20,8 +20,10 @@ function Navbar() {
     const [user, setUser] = useState(undefined);
     const { setTheme } = useTheme();
     useEffect(() => {
-        getSession().then((user) => {
-            setUser((user as any).user);
+        getSession().then((session) => {
+            if (session) {
+                setUser((session as any).user);
+            }
         });
     }, []);
 
@@ -30,10 +32,10 @@ function Navbar() {
         <NavigationMenu>
             <NavigationMenuList className="gap-8">
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/">dashboard</NavigationMenuLink>
+                    <NavigationMenuLink href="/">Dashboard</NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/friends">friends</NavigationMenuLink>
+                    <NavigationMenuLink href="/friends">Friends</NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
@@ -84,7 +86,7 @@ function Navbar() {
                     </NavigationMenuItem>
                 </> :
                 <NavigationMenuItem>
-                    <Button onClick={() => signIn()}>log in</Button>
+                    <Button onClick={() => signIn()}>Login</Button>
                 </NavigationMenuItem>
                 }
             </NavigationMenuList>
