@@ -1,14 +1,14 @@
 /*
     This API is used for creating, updating, getting, and deleting tasks
- */
+*/
 
 import connectDb from "../../../lib/database";
-    
-export const GET = async (request: any) => {
-    
-}
-    
+import Task from "../../../lib/models/Task";
+import { NextResponse } from "next/server";
 
-export const POST = async (request: any) => {
-    
+export async function POST(request) {
+    const { name, description, priority } = await request.json();
+    await connectDb();
+    await Task.create({name, description, priority});
+    return NextResponse.json({message: "Task successfuly created."}, {status: 201});
 }
