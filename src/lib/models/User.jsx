@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema(
         picture: {
             type: String,
             required: false
-        }
+        },
+        friends: {
+            type: [mongoose.Schema.Types.ObjectId],
+            required: true,
+            ref: "User",
+            default: []
+        },
     }, {timestamps: true} );
 export default (mongoose.models && (mongoose.models.User)) || mongoose.model("User", userSchema);

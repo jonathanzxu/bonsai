@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import AuthProvider from "@/lib/SessionProvider";
+import { ThemeProvider } from "@/lib/ThemesProvider";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { Toaster } from "@/components/ui/sonner";
@@ -19,13 +20,15 @@ export default async function RootLayout({
 }>) {
   // const session = await getServerSession(authOptions);
   return (
-      <html lang="en">
-        <body className={"flex flex-col min-h-screen " + inter.className}>
-          <AuthProvider>
-            <Navbar />
-            {children}
-            <Toaster />
-          </AuthProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={"flex flex-col min-h-screen h-screen " + inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <AuthProvider>
+              <Navbar />
+              {children}
+              <Toaster />
+            </AuthProvider>
+          </ThemeProvider>
         </body>
       </html>
     
