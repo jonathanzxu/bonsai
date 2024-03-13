@@ -32,6 +32,9 @@
             else if (!friendUser) {
                 return new NextResponse("Account Doesn't Exist", { status: 403 });
             }
+            else if(user.friends.includes(friendUser._id)){
+                return new NextResponse("Account is already friend", { status: 403 });
+            }
             else {
                 const friendID = friendUser._id;
                 user.friends.push(friendID);
