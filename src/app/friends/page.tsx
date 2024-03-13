@@ -12,6 +12,7 @@ import User from "../../lib/models/User";
 import {NextResponse} from "next/server";
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth";
 
 
 
@@ -26,8 +27,50 @@ async function myFunction(){
 
 
 async function getData(): Promise<Friends[]> {
+
+
+  
   console.log('Hello There Second');
   // Fetch data from your API here.
+    
+  const session = await getServerSession(authOptions);
+  if (!session) {
+      return ([]);
+  }
+  const email = session.user.email;
+  const username = session.user.username;
+  try {
+      await connectDb();
+      const user = await User.findOne({
+          $or: [
+              { email: email },
+              { username: username }
+          ]
+      });
+
+        const friendsInfo = [];
+        const friendsArray = user.friends;
+        for(let i = 0; i < friendsArray.length; ++i){
+            const temp = await User.findOne({_id: friendsArray[i]}).select({username:1, picture:1});
+            if(!temp){
+                friendsInfo.push({
+                    picture: "",
+                    username: "Account not Found"
+                }
+                );
+            }
+            else{
+                friendsInfo.push(temp);
+            }
+        }
+        return friendsInfo;
+
+      } catch (error: any) {
+        return ([]);
+    }
+
+
+  /*
   return [
     {
         picture : "https://avatars.githubusercontent.com/u/124599?v=4",
@@ -38,7 +81,8 @@ async function getData(): Promise<Friends[]> {
         username: "OtherPerson5698"
     },
     // ...
-  ]
+  ]*/
+
 }
 
 
