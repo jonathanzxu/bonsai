@@ -2,45 +2,31 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Checkbox } from "@/components/ui/checkbox"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Friends = {
-    avatarURL: string,
-    username : string,
-    id: string,
+    picture: string,
+    username : string
 }
 
 export const columns: ColumnDef<Friends>[] = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-        accessorKey: "avatarURL",
+        accessorKey: "picture",
         header: "",
         cell: ({row}) =>{
-            const imgURL:string = row.getValue("avatarURL")
+            const imgURL:string = row.getValue("picture")
             return (
                 <>
                 <Avatar>
@@ -57,7 +43,24 @@ export const columns: ColumnDef<Friends>[] = [
     header: "Username",
   },
   {
-    accessorKey: "id",
-    header: "ID",
+    id: "actions",
+    cell: ({ row }) => {
+      const payment = row.original
+ 
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="h-8 w-8 p-0 font-black">
+              . . .
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="font-red">Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
   },
 ]
