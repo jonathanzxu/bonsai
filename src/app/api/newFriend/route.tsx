@@ -17,6 +17,9 @@
         const {newFriend} = await request.json();
         const email = session.user.email;
         const username = session.user.username;
+        if(newFriend === username){
+            return new NextResponse("Can't friend yourself", { status: 402 });
+        }
         try {
             await connectDb();
             const user = await User.findOne({
