@@ -28,9 +28,6 @@ async function myFunction(){
 
 async function getData(): Promise<Friends[]> {
 
-
-  
-  console.log('Hello There Second');
   // Fetch data from your API here.
     
   const session = await getServerSession(authOptions);
@@ -53,11 +50,9 @@ async function getData(): Promise<Friends[]> {
         for(let i = 0; i < friendsArray.length; ++i){
             const temp = await User.findOne({_id: friendsArray[i]}).select({username:1, picture:1});
             if(!temp){
-                friendsInfo.push({
-                    picture: "",
-                    username: "Account not Found"
-                }
-                );
+              const index = user.friends.indexOf(friendsArray[i]);
+              user.friends.splice(index, 1);
+              await user.save();
             }
             else{
                 friendsInfo.push(temp);
@@ -68,20 +63,6 @@ async function getData(): Promise<Friends[]> {
       } catch (error: any) {
         return ([]);
     }
-
-
-  /*
-  return [
-    {
-        picture : "https://avatars.githubusercontent.com/u/124599?v=4",
-        username: "RandomPerson57"
-    },
-    {
-        picture : "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fwww.ivywise.com%2Fcore%2Fwp-content%2Fuploads%2F2019%2F11%2FAdobeStock_316283362.jpeg&sp=1708990090T20c2a91a9521203440938e5267020a364f3462a5ebbd115f514001bbe41713e3",
-        username: "OtherPerson5698"
-    },
-    // ...
-  ]*/
 
 }
 
