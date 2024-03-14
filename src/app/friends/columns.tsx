@@ -45,6 +45,21 @@ export const columns: ColumnDef<Friends>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      
+      const handleDeleteFriend = async () => { 
+        const response = await fetch("/api/removeFriend", {
+          method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res.ok) {
+                console.error('Deleted friend');
+            } else {
+                console.error('Could not delete friend');
+            }
+        });
+      };
       const payment = row.original
  
       return (
@@ -57,7 +72,7 @@ export const columns: ColumnDef<Friends>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="font-red">Delete</DropdownMenuItem>
+            <DropdownMenuItem className="font-red" onClick={handleDeleteFriend}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
