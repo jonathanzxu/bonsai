@@ -2,6 +2,8 @@
 
 This is a Next.js project that was initiated with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+The public repository link is hosted on Github and can be found at [https://github.com/jonathanzxu/bonsai](https://github.com/jonathanzxu/bonsai).
+
 ## 📚 Description
 
 Bonsai is a web-based task manager application developed using Next.js.
