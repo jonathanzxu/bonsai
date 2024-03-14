@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import { FcGoogle } from "react-icons/fc";
 
 const formSchema = z.object({
   emailAddress: z.string().min(3),
@@ -222,6 +223,7 @@ export default function Home() {
         </div>
           
         <Button onClick={() => signIn("google", {callbackUrl: "/"})} variant="outline" className="w-full">
+          <FcGoogle className="mr-2" />
           Sign in With Google
         </Button>
       </div>

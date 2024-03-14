@@ -957,7 +957,7 @@ export default function Home() {
         }}
       /> :
       <div className="flex flex-col gap-4 h-full w-full items-center justify-center">
-        <h1 className="text-3xl">no projects yet! </h1>
+        <h1 className="text-3xl">No projects yet! </h1>
         <h2 className="text-xl">create a new project to get started.</h2>
         <Dialog>
           <DialogTrigger>

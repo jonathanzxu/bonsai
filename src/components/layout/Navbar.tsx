@@ -1,4 +1,8 @@
 "use client";
+import { RxDashboard } from "react-icons/rx";
+import { FaUserFriends } from "react-icons/fa";
+import { CiLogin } from "react-icons/ci";
+import { Separator } from "@/components/ui/separator"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
@@ -32,10 +36,17 @@ function Navbar() {
         <NavigationMenu>
             <NavigationMenuList className="gap-8">
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/">Dashboard</NavigationMenuLink>
+                    <NavigationMenuLink href="/">
+                        <RxDashboard className="h-7 w-7" />
+                        Dashboard
+                    </NavigationMenuLink>
                 </NavigationMenuItem>
+                <Separator orientation="vertical" className="h-10"  />
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/friends">Friends</NavigationMenuLink>
+                    <NavigationMenuLink href="/friends">
+                        <FaUserFriends className="h-7 w-7" />
+                        Friends
+                    </NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
@@ -86,7 +97,10 @@ function Navbar() {
                     </NavigationMenuItem>
                 </> :
                 <NavigationMenuItem>
-                    <Button onClick={() => signIn()}>Login</Button>
+                    <Button className="gap-2" onClick={() => signIn()}>
+                        Log In
+                        <CiLogin className="h-5 w-5" />
+                    </Button>
                 </NavigationMenuItem>
                 }
             </NavigationMenuList>
