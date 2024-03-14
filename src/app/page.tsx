@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -55,6 +56,7 @@ import { Dialog,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { set } from "mongoose";
+import { Router } from "next/router";
 
 
 // 5 colors from red to green, pastel
@@ -719,6 +721,8 @@ return (<g className="cursor-default pointer-events-none">
 </g>)};
 
 export default function Home() {
+  const router = useRouter();
+
   const [projectTrees, setProjectTrees] = useState<any[]>([]);
   const [dataKey, setDataKey] = useState(0);
   const [projectIndex, setProjectIndex] = useState<string | undefined>();
@@ -763,7 +767,10 @@ export default function Home() {
       setFriends(res || []);
     });
     getSession().then((res) => {
-      if (!res || !res.user) return;
+      if (!res || !res.user) {
+        router.push("/login");
+        return;
+      };
       setUser(res.user);
       setProjectMembers([res.user]);
     });
