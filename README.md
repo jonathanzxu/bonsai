@@ -25,7 +25,18 @@ Bonsai is a web-based task manager application developed using Next.js.
    git clone https://github.com/jonathanzxu/bonsai.git
    ```
 
-2. **Navigate to the project directory**
+2. **Run setup script**
+   
+   The setup script can be run by executing in the root of the project:
+
+   ```bash
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+
+Alternatively, manually set up the project.
+
+1. **Navigate to the project directory**
 
    After cloning the repository, navigate to the project directory by executing:
 
@@ -33,7 +44,7 @@ Bonsai is a web-based task manager application developed using Next.js.
    cd bonsai
    ```
 
-3. **Install the dependencies**
+2. **Install the dependencies**
 
    The project dependencies can be installed by executing:
 
@@ -41,7 +52,7 @@ Bonsai is a web-based task manager application developed using Next.js.
    npm install
    ```
 
-4. **Setup the Environment Variables**
+3. **Setup the Environment Variables**
 
    The environment variables need to be set up next. Follow these steps:
 
@@ -68,7 +79,7 @@ Bonsai is a web-based task manager application developed using Next.js.
 
     - After obtaining these values, replace the placeholders in the `.env` file with the actual values and save the file.
 
-5. **Start the development server**
+4. **Start the development server**
 
    The development server can be started by executing:
 
