@@ -121,7 +121,7 @@ export async function deleteProject(projectId: String) {
 export async function getAllTasks() {
     const session = await getServerSession(authOptions);
     await connectDb();
-    if (!(session as any).user) return;
+    if (!session || !(session as any).user) return;
     const user = await User.findOne({
         username: (session as any).user.username
     });
@@ -187,7 +187,7 @@ export async function getAllTasks() {
 export async function getFriends(includeSelf = false) {
     const session = await getServerSession(authOptions);
     await connectDb();
-    if (!(session as any).user) return;
+    if (!session || !(session as any).user) return;
     const user = await User.findOne({
         username: (session as any).user.username
     });
