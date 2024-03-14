@@ -5,7 +5,6 @@ import Project from "@/lib/models/Project"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]/route"
 import User from "@/lib/models/User"
-import { ObjectId } from "mongodb"
 
 // util for building tree from mongodb graphlookup
 function list_tree_lookup(keys: any, data: any, depth=0) {
@@ -133,6 +132,7 @@ export async function getAllTasks() {
             }
         }
     });
+    console.log("projects", projects)
     const projectTrees: any = [];
     // expand subtasks for every project
     for (let i = 0; i < projects.length; i++) {
@@ -148,12 +148,18 @@ export async function getAllTasks() {
             }
         }
         ]);
-        console.log("tree", JSON.stringify(tree[0], null, 2))
+        console.log("tree", project.root, tree);
         const newMembers = await Promise.all(project.members.map(async (userId: any) => {
             const user = await User.findById(userId);
             return user;
         }));
-        for (const a of tree[0].children) {
+        let index = 0;
+        tree.forEach((a: any, i: number) => {
+            if (a._id.toString() == project.root.toString()) {
+                index = i;
+            }
+        });
+        for (const a of tree[index].children) {
             a.users = await Promise.all(a.users.map(async (userId: any) => {
                 const user = await User.findById(userId);
                 return user;
@@ -162,11 +168,11 @@ export async function getAllTasks() {
         projectTrees.push({
             project: project,
             tree: {
-                _id: tree[0]._id,
+                _id: project.root,
                 project: project._id,
                 title: project.name,
                 users: newMembers,
-                children: list_tree_lookup(tree[0].subtasks, tree[0].children)
+                children: list_tree_lookup(tree[index].subtasks, tree[index].children)
             },
         });    
     }
@@ -193,7 +199,12 @@ export async function getFriends(includeSelf = false) {
     if (includeSelf) {
         friends.push(user);
     }
-    return friends.map((a: any) => a.toObject());
+    return friends.map((a: any) => {
+        if (a) {
+            return a.toObject();
+        }
+        return {};
+    });
 }
 
 export async function addFriend(username: String) {
@@ -212,6 +223,27 @@ export async function addFriend(username: String) {
     });
     await User.findByIdAndUpdate(friend._id, {
         friends: [...friend.friends, user._id]
+    });
+    return friend.toObject();
+}
+
+export async function removeFriend(username: String) {
+    console.log("removeFriend", username);
+    const session = await getServerSession(authOptions);
+    await connectDb();
+    if (!(session as any).user) return;
+    const user = await User.findOne({
+        username: (session as any).user.username
+    });
+    const friend = await User.findOne({
+        username: username
+    });
+    if (!friend) return;
+    await User.findByIdAndUpdate(user._id, {
+        friends: user.friends.filter((a: any) => a.toString() != friend._id.toString())
+    });
+    await User.findByIdAndUpdate(friend._id, {
+        friends: friend.friends.filter((a: any) => a.toString() != user._id.toString())
     });
     return friend.toObject();
 }

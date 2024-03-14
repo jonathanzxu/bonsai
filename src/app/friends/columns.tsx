@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { removeFriend } from "../actions"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { toast } from "sonner"
 
 
 // This type is used to define the shape of our data.
@@ -31,7 +33,7 @@ export const columns: ColumnDef<Friends>[] = [
                 <>
                 <Avatar>
                     <AvatarImage src= {imgURL} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback></AvatarFallback>
                 </Avatar>
                 </>
     
@@ -46,18 +48,12 @@ export const columns: ColumnDef<Friends>[] = [
     id: "actions",
     cell: ({ row }) => {
       
-      const handleDeleteFriend = async () => { 
-        const response = await fetch("/api/removeFriend", {
-          method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((res) => {
-            if (res.ok) {
-                console.error('Deleted friend');
-            } else {
-                console.error('Could not delete friend');
-            }
+      const handleDeleteFriend = async (username: string) => { 
+        await removeFriend(username)
+        .then((res) => {
+          if (res) {
+            toast("Friend removed.")
+          }
         });
       };
       const payment = row.original
@@ -72,7 +68,9 @@ export const columns: ColumnDef<Friends>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="font-red" onClick={handleDeleteFriend}>Delete</DropdownMenuItem>
+            <DropdownMenuItem className="font-red" onClick={() => {
+              handleDeleteFriend(row.getValue("username"))
+            }}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
