@@ -99,6 +99,7 @@ const handleCreateProject = async (name: string, description: string, members: a
   }))
   .then((res) => {
     toast("project created successfully! 🎉");
+    return res;
   })
   .catch((err) => {
     console.log(err);
@@ -268,7 +269,7 @@ return (<g className="cursor-default pointer-events-none">
           <div className="flex flex-row gap-2">
             {nodeDatum.users.map((user: any, index: number) => {
             return (
-              <Avatar tooltip={"@" + (user as any).username}>
+              <Avatar key={index} tooltip={"@" + (user as any).username}>
                 <AvatarImage src={(user as any).picture} alt={(user as any).username} />
                 <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
@@ -926,17 +927,16 @@ export default function Home() {
                       handleCreateProject(projectName, projectDescription, projectMembers)
                       .then((res) => {
                         if (res === null) return;
-                        console.log("res:", res);
                         setProjectTrees([...projectTrees, {
                           project: res,
                           tree: {
-                            name: projectName,
+                            title: projectName,
                             description: projectDescription,
                             children: [],
                             users: projectMembers
                           }
                         }])
-                        setProjectIndex((projectTrees.length - 1).toString());
+                        setProjectIndex((projectTrees.length).toString());
                         currentZoom.current = 1;
                         currentTranslate.current = translate;
                         setDataKey(0);
@@ -952,7 +952,7 @@ export default function Home() {
       {projectTrees.length > 0 ?
       <Tree 
         key={dataKey + 3 * parseInt(projectIndex || "0")}
-        data={(projectTrees[parseInt(projectIndex || "0")] as any).tree} 
+        data={(projectTrees[Math.min(parseInt(projectIndex || "0"), projectTrees.length)] as any).tree} 
         translate={(!initialLoaded.current ? translate : currentTranslate.current)} // initial values on render
         zoom={currentZoom.current} // initial values on render
         orientation="vertical" 
@@ -1063,17 +1063,17 @@ export default function Home() {
                   handleCreateProject(projectName, projectDescription, projectMembers)
                   .then((res) => {
                     if (res === null) return;
-                    console.log("res:", res);
+                    console.log("resafter:", res);
                     setProjectTrees([...projectTrees, {
                       project: res,
                       tree: {
-                        name: projectName,
+                        title: projectName,
                         description: projectDescription,
                         children: [],
                         users: projectMembers
                       }
                     }])
-                    setProjectIndex((projectTrees.length - 1).toString());
+                    setProjectIndex((projectTrees.length).toString());
                     currentZoom.current = 1;
                     currentTranslate.current = translate;
                     setDataKey(0);

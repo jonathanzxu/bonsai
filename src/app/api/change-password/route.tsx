@@ -7,7 +7,7 @@ import User from "../../../lib/models/User";
 import bcrypt from "bcrypt";
 import {NextResponse} from "next/server";
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions"
 
 export const POST = async (request: any) => {
     const session = await getServerSession(authOptions);

@@ -6,7 +6,7 @@ import connectDb from "../../../lib/database";
 import User from "../../../lib/models/User";
 import {NextResponse} from "next/server";
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions"
 
 export const DELETE = async () => {
 

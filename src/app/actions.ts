@@ -3,7 +3,7 @@ import connectDb from "@/lib/database"
 import Task from "@/lib/models/Task"
 import Project from "@/lib/models/Project"
 import { getServerSession } from "next-auth"
-import { authOptions } from "./api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/authOptions"
 import User from "@/lib/models/User"
 
 // util for building tree from mongodb graphlookup
@@ -92,6 +92,7 @@ export async function createProject(name: String, description: String, members: 
     await Task.findByIdAndUpdate(task._id, {
         project: project._id,
     });
+    console.log("project", project);
     return project.toObject();
 }
 

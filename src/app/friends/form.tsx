@@ -68,7 +68,7 @@ export function FriendForm(){
                 {...field} />
               </FormControl>
               <FormDescription>
-                Input your friend's username.
+                Input your friend&apos;s username.
               </FormDescription>
               <FormMessage />
             </FormItem>
