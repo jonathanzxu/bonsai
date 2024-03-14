@@ -176,6 +176,7 @@ const handleCreateTask = (parentId: any, foreignObjectProps: any) => {
   }
   createTask(parentId, foreignObjectProps.newTitle, foreignObjectProps.newDescription, foreignObjectProps.newDueDate, foreignObjectProps.newPriority, foreignObjectProps.newStatus, foreignObjectProps.newAssignees.map((user: any) => user._id))
   .then((res) => {
+    console.log("task created, received: ", res);
     const newProjectTrees = [...foreignObjectProps.projectTrees];
     // recurse through the tree to find the parent and add the new task
     const findAndAddTask = (node: any) => {
@@ -195,7 +196,7 @@ const handleCreateTask = (parentId: any, foreignObjectProps: any) => {
         node.children.forEach(findAndAddTask);
       }
     };
-    newProjectTrees[foreignObjectProps.currentProjectIndex].tree.children.forEach(findAndAddTask);
+    findAndAddTask(newProjectTrees[foreignObjectProps.currentProjectIndex].tree);
     foreignObjectProps.setProjectTrees(newProjectTrees);
     foreignObjectProps.setDataKey(foreignObjectProps.dataKey + 1); // force a re-render
     toast("task created successfully! 🎉");
@@ -266,7 +267,7 @@ return (<g className="cursor-default pointer-events-none">
             {nodeDatum.users.map((user: any, index: number) => {
             return (
               <Avatar tooltip={"@" + (user as any).username}>
-                <AvatarImage src={(user as any).profile} alt={(user as any).username} />
+                <AvatarImage src={(user as any).picture} alt={(user as any).username} />
                 <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
             )})}
@@ -360,7 +361,7 @@ return (<g className="cursor-default pointer-events-none">
                   <Avatar key={index} tooltip={"@" + (user as any).username} className="cursor-pointer hover:opacity-50 transition-opacity" onClick={() => {
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
                   }}>
-                    <AvatarImage src={(user as any).profile} alt={(user as any).username} />
+                    <AvatarImage src={(user as any).picture} alt={(user as any).username} />
                     <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
@@ -482,7 +483,7 @@ return (<g className="cursor-default pointer-events-none">
                     }
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
                   }}>
-                    <AvatarImage src={(user as any).profile} alt={(user as any).username} />
+                    <AvatarImage src={(user as any).picture} alt={(user as any).username} />
                     <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
@@ -626,7 +627,7 @@ return (<g className="cursor-default pointer-events-none">
                   <Avatar key={index} tooltip={"@" + (user as any).username} className="cursor-pointer hover:opacity-50 transition-opacity" onClick={() => {
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
                   }}>
-                    <AvatarImage src={(user as any).profile} alt={(user as any).username} />
+                    <AvatarImage src={(user as any).picture} alt={(user as any).username} />
                     <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
@@ -854,8 +855,8 @@ export default function Home() {
                         }
                         setProjectMembers(projectMembers.filter((u: any) => u.username != (newUser as any).username));
                       }}>
-                        <AvatarImage src={(newUser as any).profile} alt={(newUser as any).username} />
-                        <AvatarFallback>{(newUser as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                        <AvatarImage src={(newUser as any).picture} alt={(newUser as any).username} />
+                        <AvatarFallback>{(newUser as any).username && ((newUser as any).username.substring(0, 1).toUpperCase())}</AvatarFallback>
                       </Avatar>
                     )}
                     )}
@@ -991,8 +992,8 @@ export default function Home() {
                     }
                     setProjectMembers(projectMembers.filter((u: any) => u.username != (newUser as any).username));
                   }}>
-                    <AvatarImage src={(newUser as any).profile} alt={(newUser as any).username} />
-                    <AvatarFallback>{(newUser as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                    <AvatarImage src={(newUser as any).picture} alt={(newUser as any).username} />
+                    <AvatarFallback>{(newUser as any).username && ((newUser as any).username.substring(0, 1).toUpperCase())}</AvatarFallback>
                   </Avatar>
                 )}
                 )}

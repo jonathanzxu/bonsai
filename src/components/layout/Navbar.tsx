@@ -27,6 +27,7 @@ function Navbar() {
         getSession().then((session) => {
             if (session) {
                 setUser((session as any).user);
+                console.log("user", (session as any).user);
             }
         });
     }, []);
@@ -36,14 +37,14 @@ function Navbar() {
         <NavigationMenu>
             <NavigationMenuList className="gap-8">
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/">
+                    <NavigationMenuLink href="/" className="flex gap-2 items-center">
                         <RxDashboard className="h-7 w-7" />
                         Dashboard
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <Separator orientation="vertical" className="h-10"  />
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/friends">
+                    <NavigationMenuLink href="/friends" className="flex gap-2 items-center">
                         <FaUserFriends className="h-7 w-7" />
                         Friends
                     </NavigationMenuLink>
@@ -81,8 +82,8 @@ function Navbar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger style={{ outline: 'none' }}>
                                 <Avatar>
-                                    <AvatarImage src={(user as any).profile} alt={(user as any).username} />
-                                    <AvatarFallback>{(user as any).username ? (user as any).username.substring(0, 1).toUpperCase() : ""}</AvatarFallback>
+                                    <AvatarImage src={(user as any).picture} alt={(user as any).username} />
+                                    <AvatarFallback>{(user as any) && ((user as any).username ? (user as any).username.substring(0, 1).toUpperCase() : "")}</AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
