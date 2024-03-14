@@ -24,8 +24,10 @@ function Navbar() {
     const [user, setUser] = useState(undefined);
     const { setTheme } = useTheme();
     useEffect(() => {
-        getSession().then((user) => {
-            setUser((user as any).user);
+        getSession().then((session) => {
+            if (session) {
+                setUser((session as any).user);
+            }
         });
     }, []);
 
