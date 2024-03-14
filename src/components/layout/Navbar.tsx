@@ -35,6 +35,7 @@ function Navbar() {
   return (
     <div className="flex flex-row w-screen h-fit justify-between px-12 py-4 border-b-[1px] border-gray-200">
         <NavigationMenu>
+            {user && 
             <NavigationMenuList className="gap-8">
                 <NavigationMenuItem>
                     <NavigationMenuLink href="/" className="flex gap-2 items-center">
@@ -50,6 +51,7 @@ function Navbar() {
                     </NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
+            }
         </NavigationMenu>
         <NavigationMenu>
             <NavigationMenuList>
