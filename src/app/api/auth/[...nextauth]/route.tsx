@@ -50,14 +50,16 @@ export const authOptions: any = {
                     await connectDb();
                     const foundUser = await User.findOne({email: profile.email});
                     if (!foundUser) {
-                        const newUser = new User(
-                            {
-                                email: profile.email,
-                                username: profile.name,
-                                picture: profile.image
-                            }
-                        );
-                        newUser.save();
+                        if (profile.email) {
+                            const newUser = new User(
+                                {
+                                    email: profile.email,
+                                    username: profile.email.slice(0, profile.email.indexOf("@")),
+                                    picture: profile.image
+                                }
+                            );
+                            newUser.save();
+                        } else { return false; }
                     }
                     return true;
                 } catch (error) { return false; }

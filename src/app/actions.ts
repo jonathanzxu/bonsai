@@ -125,6 +125,7 @@ export async function getAllTasks() {
     const user = await User.findOne({
         username: (session as any).user.username
     });
+    if (!user) return;
     const projects = await Project.find({
         members: {
             $elemMatch: {
@@ -191,6 +192,7 @@ export async function getFriends(includeSelf = false) {
     const user = await User.findOne({
         username: (session as any).user.username
     });
+    if (!user) return;
     const friends: any[] = [];
     await Promise.all(user.friends.map(async (friendId: any) => {
         const friend = await User.findById(friendId);
