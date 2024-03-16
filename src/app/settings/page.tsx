@@ -31,6 +31,7 @@ import {getSession, signOut} from 'next-auth/react';
 
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
+import {toast} from "sonner"
 
 function AvatarChange(){
     const [user, setUser] = useState(undefined);
@@ -72,6 +73,7 @@ function DeleteAccountButton() {
                 signOut({ callbackUrl: '/login' });
             } else {
                 console.error('Could not delete user');
+                toast.error("Account could not be deleted 😢");
             }
         });
     };
@@ -151,8 +153,10 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed username');
+              toast.success("Username changed successfully! 🎉");
           } else {
               console.error('Could not change username');
+              toast.error("Username could not be changed 😢");
           }
       });
   }
@@ -177,8 +181,10 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed email');
+              toast.success('Email changed successfully! 🎉');
           } else {
               console.error('Could not change email');
+              toast.error('Email could not be changed 😢');
           }
       });
   }
@@ -206,8 +212,12 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed password');
+              toast.success("Password changed successfully! 🎉");
           } else {
               console.error('Could not change password');
+              toast.error("Password could not be changed. 😢", {
+               description: "Please check your old password and try again."
+              });
           }
       });
   }
@@ -232,8 +242,10 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed picture');
+              toast.success("Picture changed successfully! 🎉");
           } else {
               console.error('Could not change picture');
+              toast.error("Picture could not be changed 😢");
           }
       });
   }
