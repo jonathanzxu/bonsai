@@ -101,8 +101,8 @@ function DeleteAccountButton() {
 
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  username: z.string().min(6, {
+    message: "Username must be at least 6 characters.",
   }),
 });
 
@@ -113,7 +113,9 @@ const formSchemaEM = z.object({
 const formSchemaPW = z
 .object({
   passwordPrev: z.string(),
-  password: z.string(),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
   passwordConfirm: z.string(),
 })
 .refine((data) => {
@@ -243,7 +245,7 @@ export default function ProfileForm() {
     <div>
     <AvatarChange/>
     <Form {...formAV}>
-      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-0 mb-4">
+      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-3 mb-4">
       <FormField
           control={formAV.control}
           name="image"
@@ -252,13 +254,10 @@ export default function ProfileForm() {
               <FormLabel>Change Image</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Image URL"
+                placeholder="Input the url of your new image"
                 type = "url"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Input the url of your new image
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -270,7 +269,7 @@ export default function ProfileForm() {
     </div>
     <div className = "flex-1 p-10">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0 mb-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mb-4">
       <FormField
           control={form.control}
           name="username"
@@ -279,13 +278,10 @@ export default function ProfileForm() {
               <FormLabel>Change Username</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Username"
+                placeholder="This is your public display name."
                 type = "username"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -295,7 +291,7 @@ export default function ProfileForm() {
       </form>
     </Form>
     <Form {...formEM}>
-      <form onSubmit={formEM.handleSubmit(onSubmitEM)} className="space-y-0 mb-4">
+      <form onSubmit={formEM.handleSubmit(onSubmitEM)} className="space-y-3 mb-4">
       <FormField
           control={formEM.control}
           name="email"
@@ -304,13 +300,10 @@ export default function ProfileForm() {
               <FormLabel>Change Email Address</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Email"
+                placeholder="Your account email"
                 type = "email"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Your account email
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -319,7 +312,7 @@ export default function ProfileForm() {
       </form>
     </Form>
     <Form {...formPW}>
-      <form onSubmit={formPW.handleSubmit(onSubmitPW)}>
+      <form onSubmit={formPW.handleSubmit(onSubmitPW)} className="space-y-3 mb-4">
       <FormField
           control={formPW.control}
           name="passwordPrev"
@@ -328,13 +321,10 @@ export default function ProfileForm() {
               <FormLabel>Change Password</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Current Password"
+                placeholder="Your current password"
                 type = "password"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Your current password
-              </FormDescription>
               <FormMessage />
             </FormItem>
         )}
@@ -346,13 +336,10 @@ export default function ProfileForm() {
             <FormItem className="mb-2">
               <FormControl>
                 <Input
-                placeholder="Password"
+                placeholder="Your new password"
                 type = "password"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Your new password
-              </FormDescription>
               <FormMessage />
             </FormItem>
         )}
@@ -364,13 +351,10 @@ export default function ProfileForm() {
             <FormItem >
               <FormControl>
                 <Input
-                placeholder="Password Confirm"
+                placeholder="Confirm new password"
                 type = "password"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                  Confirm your new password
-              </FormDescription>
               <FormMessage />
             </FormItem>
         )}
