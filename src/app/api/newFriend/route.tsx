@@ -15,8 +15,8 @@
             return new NextResponse("Unauthorized", { status: 401 });
         }
         const {newFriend} = await request.json();
-        const email = session.user.email;
-        const username = session.user.username;
+        const email = ((session as any).user as any).email;
+        const username = ((session as any).user as any).username;
         if(newFriend === username){
             return new NextResponse("Can't friend yourself", { status: 402 });
         }
