@@ -61,7 +61,7 @@ export default function Home() {
           signIn("credentials", { email: data.emailAddress, username: data.emailAddress, password: data.password, callbackUrl: "/" });
         } else {
           console.log(response?.error);
-          toast("Oops!", {
+          toast.warning("Oops!", {
             description: "Incorrect username or password. Please try again.",
           });
         }
@@ -70,7 +70,7 @@ export default function Home() {
 
   const handleRegisterSubmit = (data : any) => {
     if (data.password !== data.confirmPassword) {
-      toast("Oops!", {
+      toast.warning("Oops!", {
         description: "Passwords do not match",
       });
       return;
@@ -90,7 +90,7 @@ export default function Home() {
       if (res.ok) {
         signIn("credentials", { email: data.emailAddress, username: data.username, password: data.password, callbackUrl: "/" });
       } else {
-        toast("Oops!", {
+        toast.error("Oops!", {
           description: "Something went wrong when creating your account. Please try again.",
         });
       }
