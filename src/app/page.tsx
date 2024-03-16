@@ -245,8 +245,8 @@ return (<g className="cursor-default pointer-events-none">
         <CardTitle className={"flex items-center w-full " + (isRoot ? "text-3xl" : "")}>
           {nodeDatum.title}
           {!isRoot && <>
-          <Badge tooltip={"priority: " + nodeDatum.priority} className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: priorityColors[nodeDatum.priority]}}>{priorityTally(nodeDatum.priority)}</Badge>
-          <Badge className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: statusColors[nodeDatum.status]}}>{nodeDatum.status}</Badge>
+          <Badge tooltip={"priority: " + nodeDatum.priority} className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: priorityColors[nodeDatum.priority as keyof typeof priorityColors]}}>{priorityTally(nodeDatum.priority)}</Badge>
+          <Badge className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: statusColors[nodeDatum.status as keyof typeof statusColors]}}>{nodeDatum.status}</Badge>
           </>}
           </CardTitle>
         <CardDescription>{nodeDatum.description}</CardDescription>
@@ -271,7 +271,7 @@ return (<g className="cursor-default pointer-events-none">
             return (
               <Avatar key={index} tooltip={"@" + (user as any).username}>
                 <AvatarImage src={(user as any).picture} alt={(user as any).username} />
-                <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                <AvatarFallback>{(user as any).username && (user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
             )})}
           </div>
@@ -365,7 +365,7 @@ return (<g className="cursor-default pointer-events-none">
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
                   }}>
                     <AvatarImage src={(user as any).picture} alt={(user as any).username} />
-                    <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{(user as any).username && (user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
                 )}
@@ -487,7 +487,7 @@ return (<g className="cursor-default pointer-events-none">
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
                   }}>
                     <AvatarImage src={(user as any).picture} alt={(user as any).username} />
-                    <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{(user as any).substring && (user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
                 )}
@@ -631,7 +631,7 @@ return (<g className="cursor-default pointer-events-none">
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
                   }}>
                     <AvatarImage src={(user as any).picture} alt={(user as any).username} />
-                    <AvatarFallback>{(user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{(user as any).username && (user as any).username.substring(0, 1).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 )}
                 )}
@@ -754,6 +754,7 @@ export default function Home() {
   useEffect(() => {
     getAllTasks().then((res) => {
       console.log("projectTrees:", res);
+      if (!res) res = [];
       if (res.length > 0) {
         setProjectIndex("0");
       }
@@ -930,6 +931,7 @@ export default function Home() {
                         setProjectTrees([...projectTrees, {
                           project: res,
                           tree: {
+                            _id: res.root,
                             title: projectName,
                             description: projectDescription,
                             children: [],
@@ -949,7 +951,7 @@ export default function Home() {
           </SelectContent>
         </Select>
       </div>
-      {projectTrees.length > 0 ?
+      {projectTrees && projectTrees.length > 0 ?
       <Tree 
         key={dataKey + 3 * parseInt(projectIndex || "0")}
         data={(projectTrees[Math.min(parseInt(projectIndex || "0"), projectTrees.length)] as any).tree} 
@@ -993,14 +995,17 @@ export default function Home() {
                 {projectMembers.map((newUser: any, index: number) => {
                 return (
                   <Avatar key={index} tooltip={"@" + (newUser as any).username} className="cursor-pointer hover:opacity-50 transition-opacity" onClick={() => {
-                    if ((newUser as any).username == user.username) {
+                    if ((newUser) && (newUser as any).username == user.username) {
                       toast.warning("you can't remove yourself from your own project! 😅");
                       return;
                     }
                     setProjectMembers(projectMembers.filter((u: any) => u.username != (newUser as any).username));
                   }}>
+                    {newUser && <>
                     <AvatarImage src={(newUser as any).picture} alt={(newUser as any).username} />
                     <AvatarFallback>{(newUser as any).username && ((newUser as any).username.substring(0, 1).toUpperCase())}</AvatarFallback>
+                    </>
+                    }
                   </Avatar>
                 )}
                 )}
@@ -1067,6 +1072,7 @@ export default function Home() {
                     setProjectTrees([...projectTrees, {
                       project: res,
                       tree: {
+                        _id: res.root,
                         title: projectName,
                         description: projectDescription,
                         children: [],

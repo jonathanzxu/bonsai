@@ -35,7 +35,7 @@ import {router} from "next/client";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
 
-function AvatarChange({ user }){
+function AvatarChange({ user } : any){
     const [imageSrc, setImageSrc] = useState("");
     const [altText, setAltText] = useState("");
     const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
@@ -167,7 +167,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, username: values.username}));
+              setUser((prevUser : any) => ({...prevUser, username: values.username}));
               toast.success("Username changed successfully! 🎉");
           } else {
               toast.error("Username could not be changed 😢");
@@ -194,7 +194,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, email: values.email}));
+              setUser((prevUser : any) => ({...prevUser, email: values.email}));
               toast.success('Email changed successfully! 🎉');
           } else {
               toast.error('Email could not be changed 😢');
@@ -224,7 +224,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, password: values.password}));
+              setUser((prevUser : any) => ({...prevUser, password: values.password}));
               toast.success("Password changed successfully! 🎉");
           } else {  
               toast.error("Password could not be changed. 😢", {
@@ -252,7 +252,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, picture: values.image}));
+              setUser((prevUser : any) => ({...prevUser, picture: values.image}));
               toast.success("Picture changed successfully! 🎉");
           } else {
               toast.error("Picture could not be changed 😢");
