@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import { Alert } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
     AlertDialog,
@@ -32,6 +32,7 @@ import {getSession, signOut} from 'next-auth/react';
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
 import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 function AvatarChange({ user }){
     const [imageSrc, setImageSrc] = useState("");
@@ -57,6 +58,7 @@ function AvatarChange({ user }){
 }
 
 function DeleteAccountButton() {
+    const router = useRouter();
     const handleDeleteAccount = async () => {
         const response = await fetch('/api/delete-account', {
             method: 'DELETE',
@@ -65,18 +67,17 @@ function DeleteAccountButton() {
             },
         }).then((res) => {
             if (res.ok) {
-                console.error('Deleted user');
                 signOut({ callbackUrl: '/login' });
                 router.push('/login');
             } else {
                 console.error('Could not delete user');
+                router.push('/login');
             }
         });
     };
 
-
     return (
-        <Button>
+        <div style={{color: 'red'}}>
             <AlertDialog>
                 <AlertDialogTrigger>Delete Account</AlertDialogTrigger>
                 <AlertDialogContent>
@@ -93,7 +94,7 @@ function DeleteAccountButton() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </Button>
+        </div>
     );
 }
 
@@ -135,6 +136,17 @@ export default function ProfileForm() {
             }
         });
     }, []);
+
+    const [message, setMessage] = useState("");
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage("");
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+
     //username
    const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -154,10 +166,10 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              console.error('Changed username');
               setUser(prevUser => ({...prevUser, username: values.username}));
+              setMessage('Username successfully changed');
           } else {
-              console.error('Could not change username');
+              setMessage('Could not change username');
           }
       });
   }
@@ -181,10 +193,10 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              console.error('Changed email');
               setUser(prevUser => ({...prevUser, email: values.email}));
+              setMessage('Email successfully changed');
           } else {
-              console.error('Could not change email');
+              setMessage('Could not change email');
           }
       });
   }
@@ -211,10 +223,10 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              console.error('Changed password');
               setUser(prevUser => ({...prevUser, password: values.password}));
+              setMessage('Password successfully changed');
           } else {
-              console.error('Could not change password');
+              setMessage('Could not change password');
           }
       });
   }
@@ -238,10 +250,10 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              console.error('Changed picture');
               setUser(prevUser => ({...prevUser, picture: values.image}));
+              setMessage('Profile picture successfully changed');
           } else {
-              console.error('Could not change picture');
+              setMessage('Could not change profile picture');
           }
       });
   }
@@ -279,6 +291,7 @@ export default function ProfileForm() {
     </Form>
     </div>
     <div className = "flex-1 p-10">
+        <>{message && <Alert style={{ marginBottom: '20px' }}>{message}</Alert>} {}</>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0 mb-4">
       <FormField
