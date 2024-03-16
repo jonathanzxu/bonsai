@@ -15,8 +15,8 @@
             return new NextResponse("Unauthorized", { status: 401 });
         }
         const {deleteFriend} = await request.json();
-        const email = session.user.email;
-        const username = session.user.username;
+        const email = ((session as any).user as any).email;
+        const username = ((session as any).user as any).username;
         try {
             await connectDb();
             const user = await User.findOne({

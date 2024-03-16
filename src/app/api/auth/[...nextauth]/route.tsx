@@ -11,5 +11,5 @@ import {NextResponse} from "next/server";
 import NextAuth, {Account, Profile, User as AuthUser} from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
-export const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

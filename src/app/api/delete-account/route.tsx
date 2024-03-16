@@ -14,8 +14,8 @@ export const DELETE = async () => {
     if (!session) {
         return new NextResponse("Unauthorized", { status: 401 });
     }
-    const email = session.user.email;
-    const username = session.user.username;
+    const email = ((session as any).user as any).email;
+    const username = ((session as any).user as any).username;
 
     try {
         await connectDb();

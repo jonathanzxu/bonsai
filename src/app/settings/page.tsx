@@ -34,7 +34,7 @@ import {useEffect, useState} from "react";
 import {router} from "next/client";
 import {useRouter} from "next/navigation";
 
-function AvatarChange({ user }){
+function AvatarChange({ user } : any){
     const [imageSrc, setImageSrc] = useState("");
     const [altText, setAltText] = useState("");
     const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
@@ -166,7 +166,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, username: values.username}));
+              setUser((prevUser : any) => ({...prevUser, username: values.username}));
               setMessage('Username successfully changed');
           } else {
               setMessage('Could not change username');
@@ -193,7 +193,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, email: values.email}));
+              setUser((prevUser : any) => ({...prevUser, email: values.email}));
               setMessage('Email successfully changed');
           } else {
               setMessage('Could not change email');
@@ -223,7 +223,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, password: values.password}));
+              setUser((prevUser : any) => ({...prevUser, password: values.password}));
               setMessage('Password successfully changed');
           } else {
               setMessage('Could not change password');
@@ -250,7 +250,7 @@ export default function ProfileForm() {
           }),
       }).then((res) => {
           if (res.ok) {
-              setUser(prevUser => ({...prevUser, picture: values.image}));
+              setUser((prevUser : any) => ({...prevUser, picture: values.image}));
               setMessage('Profile picture successfully changed');
           } else {
               setMessage('Could not change profile picture');

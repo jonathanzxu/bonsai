@@ -245,8 +245,8 @@ return (<g className="cursor-default pointer-events-none">
         <CardTitle className={"flex items-center w-full " + (isRoot ? "text-3xl" : "")}>
           {nodeDatum.title}
           {!isRoot && <>
-          <Badge tooltip={"priority: " + nodeDatum.priority} className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: priorityColors[nodeDatum.priority]}}>{priorityTally(nodeDatum.priority)}</Badge>
-          <Badge className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: statusColors[nodeDatum.status]}}>{nodeDatum.status}</Badge>
+          <Badge tooltip={"priority: " + nodeDatum.priority} className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: priorityColors[nodeDatum.priority as keyof typeof priorityColors]}}>{priorityTally(nodeDatum.priority)}</Badge>
+          <Badge className="ml-2 pointer-events-none cursor-default" style={{backgroundColor: statusColors[nodeDatum.status as keyof typeof statusColors]}}>{nodeDatum.status}</Badge>
           </>}
           </CardTitle>
         <CardDescription>{nodeDatum.description}</CardDescription>
