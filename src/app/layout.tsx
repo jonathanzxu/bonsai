@@ -20,8 +20,8 @@ export default async function RootLayout({
 }>) {
   // const session = await getServerSession(authOptions);
   return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={"flex flex-col min-h-screen h-screen " + inter.className}>
+      <html lang="en" suppressHydrationWarning={true}>
+        <body className={"flex flex-col min-h-screen h-screen " + inter.className} suppressHydrationWarning={true}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <AuthProvider>
               <Navbar />
