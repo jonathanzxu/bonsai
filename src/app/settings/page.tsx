@@ -33,6 +33,7 @@ import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
 import {router} from "next/client";
 import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 function AvatarChange({ user } : any){
     const [imageSrc, setImageSrc] = useState("");
@@ -167,9 +168,9 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               setUser((prevUser : any) => ({...prevUser, username: values.username}));
-              setMessage('Username successfully changed');
+              toast.success("Username changed successfully! 🎉");
           } else {
-              setMessage('Could not change username');
+              toast.error("Username could not be changed 😢");
           }
       });
   }
@@ -194,9 +195,9 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               setUser((prevUser : any) => ({...prevUser, email: values.email}));
-              setMessage('Email successfully changed');
+              toast.success('Email changed successfully! 🎉');
           } else {
-              setMessage('Could not change email');
+              toast.error('Email could not be changed 😢');
           }
       });
   }
@@ -224,11 +225,12 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               setUser((prevUser : any) => ({...prevUser, password: values.password}));
-              setMessage('Password successfully changed');
-          } else {
-              setMessage('Could not change password');
-          }
-      });
+              toast.success("Password changed successfully! 🎉");
+          } else {  
+              toast.error("Password could not be changed. 😢", {
+               description: "Please check your old password and try again."
+              });
+          }});
   }
 
   //Avatar
@@ -251,9 +253,9 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               setUser((prevUser : any) => ({...prevUser, picture: values.image}));
-              setMessage('Profile picture successfully changed');
+              toast.success("Picture changed successfully! 🎉");
           } else {
-              setMessage('Could not change profile picture');
+              toast.error("Picture could not be changed 😢");
           }
       });
   }
@@ -265,7 +267,7 @@ export default function ProfileForm() {
     <div>
     <AvatarChange user={user}/>
     <Form {...formAV}>
-      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-0 mb-4">
+      <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-3 mb-4">
       <FormField
           control={formAV.control}
           name="image"
@@ -274,26 +276,21 @@ export default function ProfileForm() {
               <FormLabel>Change Image</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Image URL"
+                placeholder="Input the url of your new image"
                 type = "url"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Input the url of your new image
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <Button type="submit">Submit</Button>
       </form>
     </Form>
     </div>
     <div className = "flex-1 p-10">
-        <>{message && <Alert style={{ marginBottom: '20px' }}>{message}</Alert>} {}</>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0 mb-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mb-4">
       <FormField
           control={form.control}
           name="username"
@@ -302,23 +299,19 @@ export default function ProfileForm() {
               <FormLabel>Change Username</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Username"
+                placeholder="This is your public display name."
                 type = "username"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <Button type="submit">Submit</Button>
       </form>
     </Form>
     <Form {...formEM}>
-      <form onSubmit={formEM.handleSubmit(onSubmitEM)} className="space-y-0 mb-4">
+      <form onSubmit={formEM.handleSubmit(onSubmitEM)} className="space-y-3 mb-4">
       <FormField
           control={formEM.control}
           name="email"
@@ -327,13 +320,10 @@ export default function ProfileForm() {
               <FormLabel>Change Email Address</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Email"
+                placeholder="Your account email"
                 type = "email"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Your account email
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -342,7 +332,7 @@ export default function ProfileForm() {
       </form>
     </Form>
     <Form {...formPW}>
-      <form onSubmit={formPW.handleSubmit(onSubmitPW)}>
+      <form onSubmit={formPW.handleSubmit(onSubmitPW)} className="space-y-3 mb-4">
       <FormField
           control={formPW.control}
           name="passwordPrev"
@@ -351,13 +341,10 @@ export default function ProfileForm() {
               <FormLabel>Change Password</FormLabel>
               <FormControl>
                 <Input
-                placeholder="Current Password"
+                placeholder="Your current password"
                 type = "password"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Your current password
-              </FormDescription>
               <FormMessage />
             </FormItem>
         )}
@@ -369,13 +356,10 @@ export default function ProfileForm() {
             <FormItem className="mb-2">
               <FormControl>
                 <Input
-                placeholder="Password"
+                placeholder="Your new password"
                 type = "password"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                Your new password
-              </FormDescription>
               <FormMessage />
             </FormItem>
         )}
@@ -387,13 +371,10 @@ export default function ProfileForm() {
             <FormItem >
               <FormControl>
                 <Input
-                placeholder="Password Confirm"
+                placeholder="Confirm new password"
                 type = "password"
                 {...field} />
               </FormControl>
-              <FormDescription>
-                  Confirm your new password
-              </FormDescription>
               <FormMessage />
             </FormItem>
         )}

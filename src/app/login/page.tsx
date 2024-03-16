@@ -9,16 +9,20 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { SignInResponse } from "next-auth/react";
+import { GiBonsaiTree } from "react-icons/gi";
 
 const formSchema = z.object({
-  emailAddress: z.string().min(3),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters",
+  emailAddress: z.string().min(1, {
+    message: "Please enter your username or email",
+  }),
+  password: z.string().min(1, {
+    message: "Please enter your password",
   }),
 });
 
 const registerFormSchema = z.object({
-  username: z.string().min(3, {
+  username: z.string().min(6, {
     message: "Username must be at least 6 characters",
   }),
   emailAddress: z.string().email(),
@@ -48,15 +52,25 @@ export default function Home() {
     }
   });
 
-  const handleSubmit = (data : any) => {
+  const handleSubmit = (data: any) => {
     console.log("form: ", data);
     // pass emailAddress to both email and username fields, backend will try email first then username
-    signIn("credentials", { email: data.emailAddress, username: data.emailAddress, password: data.password, callbackUrl: "/" });
+    signIn("credentials", { redirect: false, email: data.emailAddress, username: data.emailAddress, password: data.password, callbackUrl: "/" })
+      .then((response: SignInResponse | undefined) => {
+        if (response?.ok) {
+          signIn("credentials", { email: data.emailAddress, username: data.emailAddress, password: data.password, callbackUrl: "/" });
+        } else {
+          console.log(response?.error);
+          toast.warning("Oops!", {
+            description: "Incorrect username or password. Please try again.",
+          });
+        }
+      });
   }
 
   const handleRegisterSubmit = (data : any) => {
     if (data.password !== data.confirmPassword) {
-      toast("Oops!", {
+      toast.warning("Oops!", {
         description: "Passwords do not match",
       });
       return;
@@ -76,7 +90,7 @@ export default function Home() {
       if (res.ok) {
         signIn("credentials", { email: data.emailAddress, username: data.username, password: data.password, callbackUrl: "/" });
       } else {
-        toast("Oops!", {
+        toast.error("Oops!", {
           description: "Something went wrong when creating your account. Please try again.",
         });
       }
@@ -85,6 +99,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center p-24">
+      <GiBonsaiTree className="text-6xl mb-4" />
       <div className="flex w-full flex-col items-center justify-center max-w-xl">
         <Tabs defaultValue="login" className="flex flex-col w-full items-center justify-center">
           <TabsList className="w-full">
