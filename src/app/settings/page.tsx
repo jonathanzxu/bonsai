@@ -31,6 +31,7 @@ import {getSession, signOut} from 'next-auth/react';
 
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
+import {router} from "next/client";
 
 function AvatarChange({ user }){
     const [imageSrc, setImageSrc] = useState("");
@@ -66,6 +67,7 @@ function DeleteAccountButton() {
             if (res.ok) {
                 console.error('Deleted user');
                 signOut({ callbackUrl: '/login' });
+                router.push('/login');
             } else {
                 console.error('Could not delete user');
             }

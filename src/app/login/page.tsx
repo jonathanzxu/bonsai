@@ -12,22 +12,22 @@ import { FcGoogle } from "react-icons/fc";
 
 const formSchema = z.object({
   emailAddress: z.string().min(3),
-  password: z.string().min(1, {
-    message: "Please enter your password",
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters",
   }),
 });
 
 const registerFormSchema = z.object({
   username: z.string().min(3, {
-    message: "Please enter your username",
+    message: "Username must be at least 6 characters",
   }),
   emailAddress: z.string().email(),
-  password: z.string().min(1, {
-    message: "Please enter your password",
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters",
   }),
-  confirmPassword: z.string().min(1, {
+  confirmPassword: z.string().min(6, {
     message: "Please confirm your password",
-  }),
+  })
 });
 
 export default function Home() {
