@@ -83,12 +83,19 @@ Alternatively, manually set up the project.
 
     - After obtaining these values, replace the placeholders in the `.env` file with the actual values and save the file.
 
-4. **Start the development server**
+4. **Build the app**
 
-   The development server can be started by executing:
+   The app may be built with:
+   ```bash
+   npm run build
+   ```
+
+5. **Start the production server**
+
+   The production server can be started by executing:
 
    ```bash
-   npm run dev
+   npm run start
    ```
 
    The project should now be running at `http://localhost:3000`.
