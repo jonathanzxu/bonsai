@@ -85,11 +85,11 @@ const priorityTally = (num: number) => {
 
 const handleCreateProject = async (name: string, description: string, members: any[]) => {
   if (name == "") {
-    toast("a project name is required");
+    toast.warning("a project name is required");
     return;
   }
   if (members.length === 0) {
-    toast("at least one member is required");
+    toast.warning("at least one member is required");
     return;
   }
   const result = await createProject(name, description, members.map((user: any) => {
@@ -98,32 +98,32 @@ const handleCreateProject = async (name: string, description: string, members: a
     return null;
   }))
   .then((res) => {
-    toast("project created successfully! 🎉");
+    toast.success("project created successfully! 🎉");
     return res;
   })
   .catch((err) => {
     console.log(err);
-    toast("something went wrong! 😢");
+    toast.error("something went wrong! 😢");
   });
   return result;
 };
 
 const handleEditProject = (projectId: any, foreignObjectProps: any) => {
   if (foreignObjectProps.newTitle == "") {
-    toast("a project name is required");
+    toast.warning("a project name is required");
     return;
   }
   if (foreignObjectProps.newAssignees.length === 0) {
-    toast("at least one member is required");
+    toast.warning("at least one member is required");
     return;
   }
   editProject(projectId, foreignObjectProps.newTitle, foreignObjectProps.newDescription, foreignObjectProps.newAssignees.map((user: any) => user._id))
   .then((res) => {
-    toast("project edited successfully! 🎉");
+    toast.success("project edited successfully! 🎉");
   })
   .catch((err) => {
     console.log(err);
-    toast("something went wrong! 😢");
+    toast.error("something went wrong! 😢");
   });
 }
 
@@ -135,11 +135,11 @@ const handleDeleteProject = (projectId: any, foreignObjectProps: any) => {
     foreignObjectProps.setProjectIndex("0");
     foreignObjectProps.setProjectTrees(newProjectTrees);
     foreignObjectProps.setDataKey(foreignObjectProps.dataKey + 1); // force a re-render
-    toast("project deleted successfully! 🎉");
+    toast.success("project deleted successfully! 🎉");
   })
   .catch((err) => {
     console.log(err);
-    toast("something went wrong! 😢");
+    toast.error("something went wrong! 😢");
   });
 }
 
@@ -163,11 +163,11 @@ const handleEditTask = (taskId: any, foreignObjectProps: any) => {
     findAndEditTask(newProjectTrees[foreignObjectProps.currentProjectIndex].tree);
     foreignObjectProps.setProjectTrees(newProjectTrees);
     foreignObjectProps.setDataKey(foreignObjectProps.dataKey + 1); // force a re-render
-    toast("task edited successfully! 🎉");
+    toast.success("task edited successfully! 🎉");
   })
   .catch((err) => {
     console.log(err);
-    toast("something went wrong! 😢");
+    toast.error("something went wrong! 😢");
   });
 }
 
@@ -202,10 +202,10 @@ const handleCreateTask = (parentId: any, foreignObjectProps: any) => {
     findAndAddTask(newProjectTrees[foreignObjectProps.currentProjectIndex].tree);
     foreignObjectProps.setProjectTrees(newProjectTrees);
     foreignObjectProps.setDataKey(foreignObjectProps.dataKey + 1); // force a re-render
-    toast("task created successfully! 🎉");
+    toast.success("task created successfully! 🎉");
   })
   .catch((err) => {
-    toast("something went wrong! 😢");
+    toast.error("something went wrong! 😢");
   });
 }
 
@@ -224,10 +224,10 @@ const handleDeleteTask = (taskId: any, foreignObjectProps: any) => {
     newProjectTrees[foreignObjectProps.currentProjectIndex].tree.children.forEach((child: any) => findAndDeleteTask(child, newProjectTrees[foreignObjectProps.currentProjectIndex].tree));
     foreignObjectProps.setProjectTrees(newProjectTrees);
     foreignObjectProps.setDataKey(foreignObjectProps.dataKey + 1); // force a re-render
-    toast("task deleted successfully! 🎉");
+    toast.success("task deleted successfully! 🎉");
   })
   .catch((err) => {
-    toast("something went wrong! 😢");
+    toast.error("something went wrong! 😢");
   });
 }
 
@@ -477,11 +477,11 @@ return (<g className="cursor-default pointer-events-none">
                 return (
                   <Avatar key={index} tooltip={"@" + (user as any).username} className="cursor-pointer hover:opacity-50 transition-opacity" onClick={() => {
                     if (foreignObjectProps.newAssignees.length == 1) {
-                      toast("you can't remove the last member from the project! if you want to delete the project, use the delete button.");
+                      toast.warning("you can't remove the last member from the project! if you want to delete the project, use the delete button.");
                       return;
                     }
                     if (foreignObjectProps.user.username != (user as any).username) {
-                      toast("you can't remove someone else from the project! time for a tough talk... 😬");
+                      toast.warning("you can't remove someone else from the project! time for a tough talk... 😬");
                       return;
                     }
                     foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != (user as any).username));
@@ -516,11 +516,11 @@ return (<g className="cursor-default pointer-events-none">
                           onSelect={(currentValue) => {
                             if (foreignObjectProps.newAssignees.some((u: any) => u.username == friend.username)) {
                               if (foreignObjectProps.newAssignees.length == 1) {
-                                toast("you can't remove the last member from the project! if you want to delete the project, use the delete button.");
+                                toast.warning("you can't remove the last member from the project! if you want to delete the project, use the delete button.");
                                 return;
                               }
                               if (foreignObjectProps.user.username != currentValue) {
-                                toast("you can't remove someone else from the project! time for a tough talk... 😬");
+                                toast.warning("you can't remove someone else from the project! time for a tough talk... 😬");
                                 return;
                               }
                               foreignObjectProps.setNewAssignees(foreignObjectProps.newAssignees.filter((u: any) => u.username != friend.username));
@@ -858,7 +858,7 @@ export default function Home() {
                     return (
                       <Avatar key={index} tooltip={"@" + (newUser as any).username} className="cursor-pointer hover:opacity-50 transition-opacity" onClick={() => {
                         if ((newUser as any).username == user.username) {
-                          toast("you can't remove yourself from your own project! 😅");
+                          toast.warning("you can't remove yourself from your own project! 😅");
                           return;
                         }
                         setProjectMembers(projectMembers.filter((u: any) => u.username != (newUser as any).username));
@@ -994,7 +994,7 @@ export default function Home() {
                 return (
                   <Avatar key={index} tooltip={"@" + (newUser as any).username} className="cursor-pointer hover:opacity-50 transition-opacity" onClick={() => {
                     if ((newUser as any).username == user.username) {
-                      toast("you can't remove yourself from your own project! 😅");
+                      toast.warning("you can't remove yourself from your own project! 😅");
                       return;
                     }
                     setProjectMembers(projectMembers.filter((u: any) => u.username != (newUser as any).username));
