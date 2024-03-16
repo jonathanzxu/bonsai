@@ -32,18 +32,15 @@ import {getSession, signOut} from 'next-auth/react';
 import * as AvatarPrimative from '@radix-ui/react-avatar';
 import {useEffect, useState} from "react";
 
-function AvatarChange(){
-    const [user, setUser] = useState(undefined);
-    useEffect(() => {
-        getSession().then((user) => {
-            if (user) {
-                setUser((user as any).user);
-            }
-        });
-    }, []);
+function AvatarChange({ user }){
+    const [imageSrc, setImageSrc] = useState("");
+    const [altText, setAltText] = useState("");
     const defaultImage = "https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80";
-    const imageSrc = user?.picture || defaultImage;
-    const altText = user?.username || "No username";
+
+    useEffect(() => {
+        setImageSrc(user?.picture || defaultImage);
+        setAltText(user?.username || "No username");
+    }, [user]);
 
     return (
         <AvatarPrimative.Root className="AvatarRoot h-500 w-500" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -56,7 +53,6 @@ function AvatarChange(){
             <div className="Username" style={{fontWeight: 'bold', marginTop: '10px'}}>{altText}</div>
         </AvatarPrimative.Root>
     )
-
 }
 
 function DeleteAccountButton() {
@@ -129,6 +125,14 @@ const formSchemaAV = z.object({
 })
 
 export default function ProfileForm() {
+    const [user, setUser] = useState(undefined);
+    useEffect(() => {
+        getSession().then((user) => {
+            if (user) {
+                setUser((user as any).user);
+            }
+        });
+    }, []);
     //username
    const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -149,6 +153,7 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed username');
+              setUser(prevUser => ({...prevUser, username: values.username}));
           } else {
               console.error('Could not change username');
           }
@@ -175,6 +180,7 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed email');
+              setUser(prevUser => ({...prevUser, email: values.email}));
           } else {
               console.error('Could not change email');
           }
@@ -204,6 +210,7 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed password');
+              setUser(prevUser => ({...prevUser, password: values.password}));
           } else {
               console.error('Could not change password');
           }
@@ -230,6 +237,7 @@ export default function ProfileForm() {
       }).then((res) => {
           if (res.ok) {
               console.error('Changed picture');
+              setUser(prevUser => ({...prevUser, picture: values.image}));
           } else {
               console.error('Could not change picture');
           }
@@ -241,7 +249,7 @@ export default function ProfileForm() {
     <>
     <div className = "flex p-12 ">
     <div>
-    <AvatarChange/>
+    <AvatarChange user={user}/>
     <Form {...formAV}>
       <form onSubmit={formAV.handleSubmit(onSubmitAV)} className="space-y-0 mb-4">
       <FormField
